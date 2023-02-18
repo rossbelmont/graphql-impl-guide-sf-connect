@@ -80,7 +80,7 @@ You may recall that the AppSync endpoint is protected by an API key. External Cr
 - Provide a **Label** (API Key Auth for AppSync) and developer **Name** (APIKeyAuthForAppSync), making note of the developer Name you assign for a later step.
 - Click **Save**.
 
-IMAGE
+![External Credential](https://github.com/rossbelmont/graphql-impl-guide-sf-connect/blob/main/images/ec-edit.png?raw=true)
 
 At this point, the External Credential is created, though we need to store the API key—securely!—and link its use to the Permission Set we defined above. Here’s how that’s accomplished:
 
@@ -90,7 +90,7 @@ At this point, the External Credential is created, though we need to store the A
 - Use `APIKey` as the **Name**, and paste in the API key from AppSync into the **Value** field.
 - Click **Save**.
 
-IMAGE
+![Permission Set Mapping](https://github.com/rossbelmont/graphql-impl-guide-sf-connect/blob/main/images/perm-set-mapping.png?raw=true)
 
 This stores the API key in an encrypted manner, and links its access to the appropriate permissions. The last step for the External Credential is to configure the HTTP header AppSync expects to contain the API key. Here’s the steps:
 
@@ -112,12 +112,12 @@ With the permissions and authentication defined, capturing the endpoint as a Nam
 	- This ensures the formula referencing the API key will be resolved correctly, and not interpreted as literal text.
 - Click **Save**.
 
-IMAGE
+![Named Credential](https://github.com/rossbelmont/graphql-impl-guide-sf-connect/blob/main/images/nc-edit.png?raw=true)
 
 #### Credential Parameter Storage: User External Credentials
 For technical reasons, credential parameters are stored in a standard object called User External Credentials. Users that make callouts with Named Credentials need Read, Create, Edit, and Delete access to this object. Make sure to grant that access via Profiles (shown below) or Permission Sets, even if the User is a System Administrator.
 
-IMAGE
+![Granting access to User External Credentials](https://github.com/rossbelmont/graphql-impl-guide-sf-connect/blob/main/images/grant-UCE-Access.gif?raw=true)
 
 ### Configure the External Data Source 
 The AppSync API acts as an **External Data Source** in Salesforce, which yields one or more **External Objects**. Those need to be configured, though the metadata exposed via AppSync allows you to skip many tedious steps. 
@@ -139,9 +139,11 @@ Next, we’ll use the exposed metadata to help create the External Objects:
 - Checkmark all three rows with the leftmost column, then click **Sync**.
 - Wait for the operation to complete, then note the new External Objects in the list toward the bottom of the screen.
 
-IMAGE
+![Sync the External Data Source](https://github.com/rossbelmont/graphql-impl-guide-sf-connect/blob/main/images/sync-xds.png?raw=true)
 
 ### Surface the Data in the Salesforce UI
 Salesforce has access to the external data at this point, though you’ll want to take a few more steps to surface it to your end users. For the purposes of this test, edit the **Customer ID** field on the new Order object and click Change Field Type to make it an Indirect Lookup to the Account field linked via the **Customer ID** field you added to that standard object.
 
 Once you add the Related List for Orders to the Page Layout for Account, you’ll be able to see the order data from AWS in the context of the customer. This provides a convenient view of a customer's recent orders for support agents and sellers working in Salesforce.
+
+![Order data in Salesforce](https://github.com/rossbelmont/graphql-impl-guide-sf-connect/blob/main/images/orders-under-account.png?raw=true)

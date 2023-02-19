@@ -31,11 +31,49 @@ If you don’t already have an AWS account designated for development and testin
 ### Create the AWS Resources via CloudFormation
 To save time, the AWS resources used in this example can be created via [this CloudFormation template](https://github.com/aws-samples/aws-appsync-sample-setup/blob/main/AppSyncGraphQLRDS.yaml) hosted in [this GitHub repository](https://github.com/aws-samples/aws-appsync-sample-setup). 
 
+- Log in to your AWS account, then navigate to CloudFormation.
+- Choose *Create Stack*
+- Under *Prerequisite - Prepare template*, choose *Template is ready*. 
+- Under *Template source*, choose *Upload a template file*.
+- Upload *AppSyncGraphRDS.yaml* that you downloaded from the previous step.
+- Choose Next.
+- Provide a name for your stack. For example, GraphQLRDS.
+- You can leave the defaults for *Network configuration* or provide a different CIDR ranges.
+- Under *Choose a deployment option* choose *Serverless* to create a serverless RDS cluster or *Standard* to create a standard cluster.
+- If you chose *Standard* provide options under *RDS Standard Mode Configuration*. You can ignore these settings if you chose *Serverless*.
+    - For *RDS Instance Class*, leave the default or choose a larger instance size.
+    - For *EC2 instance type*, leave default or choose a larger instance. The EC2 instance (via Cloud9) will allow you to connect to the RDS cluster.
+    - For *AutoHibernateTimeout*, leave the default or use a longer window. This option helps save on cost by hibernating your Cloud9 when inactive.
+- Provide the following values under *RDS Serverless Mode Configuration* if you chose the *Serverless* option. You can ignore these settings if you chose *Standard* option.
+    - Set *AutoPauseCluster* to true if you wish to save cost by scaling down the capacity to 0 when idle. 
+    - Provide an appropriate value for *SecondsUntilAutoPause* (if you set *AutoPauseCluster* to true).
+    - Set *MinCapacity* to desired minimum capacity of your RDS cluster.
+    - Set *MaxCapacity* to desired maximum capacity of your RDS cluster.
+- Provide the following values under AppSync
+    - For *AppSyncAuthenticationType* choose API_KEY if you want to configure an API KEY for authentication or AWS_IAM for AWS IAM role based authentication.
+    - For *GraphQLAdapterLocation* enter *https://github.com/rossbelmont/graphql-impl-guide-sf-connect/blob/main/graphql.resolvers.sql-1.0.0.jar*
+    - For *GraphQLAdapterName* enter *graphql.resolvers.sql-1.0.0.jar*
+    - For *GraphQLSchemaLocation* enter *https://github.com/rossbelmont/graphql-impl-guide-sf-connect/blob/main/postgres-schema.graphql*
+    - For *GraphQLSchemaName* enter *postgres-schema.graphql*
+    - For *RDSSchemaLocation* enter *https://github.com/rossbelmont/graphql-impl-guide-sf-connect/blob/main/postgres-ddl.sql*
+    - For *RDSSchemaName* enter *postgres-ddl.sql*
+- Choose Next, followed by Next.
+- Acknowledge by checking the checkbox next to *I acknowledge that AWS CloudFormation might create IAM resources.*
+- Choose Submit.
+
+
 ### Note the Database Information in Secrets Manager
-Get the generated password, TBD
+- From the AWS console, navigate to Secrets Manager, and choose the secret (either /graphqlrdsserverless/dbsecret or /graphqlrds/dbsecret)
+- Copy the ARN under *Secret ARN*. 
 
 ### Test RDS with a SQL Query
-Navigate to the query editor and execute a simple query to confirm that the database is working properly.
+- From the AWS console, navigate to RDS. 
+- Choose Query Editor from the left navigation pane.
+- Choose your database cluster under *Database instance or cluster*
+- Under *Database username* choose *Connect with a Secrets Manager ARN*
+- Enter the ARN that you copied from the previous step (*Note teh Database Information in Secrets Manager*)
+- Under *Enter the name of the database*, enter *graphqlrds*
+- Run a simple query to confirm that everything is working properly.
 
 ### Test the AppSync API with a GraphQL Query
 Run a simple GraphQL query in the web console to see that the API is functioning properly.

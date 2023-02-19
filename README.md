@@ -25,10 +25,10 @@ These high-level configuration steps are divided into two fundamental groupings:
 
 ## AWS Configuration
 
-### Obtain an AWS Account
+### 1. Obtain an AWS Account
 If you don’t already have an AWS account designated for development and testing, use [this short guide](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/) to obtain one.
 
-### Create the AWS Resources via CloudFormation
+### 2. Create the AWS Resources via CloudFormation
 To save time, the AWS resources used in this example can be created via [this CloudFormation template](https://github.com/aws-samples/aws-appsync-sample-setup/blob/main/AppSyncGraphQLRDS.yaml) hosted in [this GitHub repository](https://github.com/aws-samples/aws-appsync-sample-setup). 
 
 - Log in to your AWS account, then navigate to CloudFormation.
@@ -62,11 +62,11 @@ To save time, the AWS resources used in this example can be created via [this Cl
 - Choose Submit.
 
 
-### Note the Database Information in Secrets Manager
+### 3. Note the Database Information in Secrets Manager
 - From the AWS console, navigate to Secrets Manager, and choose the secret (it would be either */graphqlrdsserverless/dbsecret* or */graphqlrds/dbsecret*, depending on the configuration.)
 - Copy the ARN under *Secret ARN*. 
 
-### Test RDS with a SQL Query
+### 4. Test RDS with a SQL Query
 - From the AWS console, navigate to RDS. 
 - Choose Query Editor from the left navigation pane.
 - Choose your database cluster under *Database instance or cluster*
@@ -75,13 +75,13 @@ To save time, the AWS resources used in this example can be created via [this Cl
 - Under *Enter the name of the database*, enter *graphqlrds*
 - Run a simple query to confirm that everything is working properly.
 
-### Test the AppSync API with a GraphQL Query
+### 5. Test the AppSync API with a GraphQL Query
 - From the AWS console, navigate to AWS AppSync.
 - Choose the GraphQL API that was created by CloudFormation.
 - Choose *Queries* from the left navigation pane.
 - Run a simple GraphQL query in the Queries console to see that the API is returning the values as expected.
 
-### Test the API Key
+### 6. Test the API Key
 Use `curl` or Postman to ping the endpoint with the API key and see that auth is functioning correctly.
 
 ## Salesforce Configuration

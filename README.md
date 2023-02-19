@@ -63,7 +63,7 @@ To save time, the AWS resources used in this example can be created via [this Cl
 
 
 ### Note the Database Information in Secrets Manager
-- From the AWS console, navigate to Secrets Manager, and choose the secret (either /graphqlrdsserverless/dbsecret or /graphqlrds/dbsecret)
+- From the AWS console, navigate to Secrets Manager, and choose the secret (it would be either */graphqlrdsserverless/dbsecret* or */graphqlrds/dbsecret*, depending on the configuration.)
 - Copy the ARN under *Secret ARN*. 
 
 ### Test RDS with a SQL Query
@@ -71,12 +71,15 @@ To save time, the AWS resources used in this example can be created via [this Cl
 - Choose Query Editor from the left navigation pane.
 - Choose your database cluster under *Database instance or cluster*
 - Under *Database username* choose *Connect with a Secrets Manager ARN*
-- Enter the ARN that you copied from the previous step (*Note teh Database Information in Secrets Manager*)
+- Enter the ARN that you copied from the previous step (*"Note the Database Information in Secrets Manager"*)
 - Under *Enter the name of the database*, enter *graphqlrds*
 - Run a simple query to confirm that everything is working properly.
 
 ### Test the AppSync API with a GraphQL Query
-Run a simple GraphQL query in the web console to see that the API is functioning properly.
+- From the AWS console, navigate to AWS AppSync.
+- Choose the GraphQL API that was created by CloudFormation.
+- Choose *Queries* from the left navigation pane.
+- Run a simple GraphQL query in the Queries console to see that the API is returning the values as expected.
 
 ### Test the API Key
 Use `curl` or Postman to ping the endpoint with the API key and see that auth is functioning correctly.

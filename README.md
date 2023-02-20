@@ -82,8 +82,32 @@ To save time, the AWS resources used in this example can be created via [this Cl
 - Run a simple GraphQL query in the Queries console to see that the API is returning the values as expected.
 
 ### 6. Test the API Key
-Use `curl` or Postman to ping the endpoint with the API key and see that auth is functioning correctly.
+Use `curl` (sample below) or Postman to ping the endpoint with the API key and see that auth is functioning correctly.
 
+```
+curl -XPOST -H "Content-Type:application/graphql" -H "x-api-key:YOUR-API-key" -d '{ "query": "query MyQuery {graphqlsample_MyOrder(where: {OrderId: {eq: \"ORD-100\"}}) {edges {node {OrderDate SourceIpAddress CustomerId Status TotalCost}}}}" }' https://YOUR-APPSYNC-ENDPOINT/graphql
+```
+
+You should see the following data returned (formatted here for readability):
+```
+{
+  "data": {
+    "graphqlsample_MyOrder": {
+      "edges": [
+        {
+          "node": {
+            "OrderDate": "2022-09-13T10:10:01Z",
+            "SourceIpAddress": "169.114.197.175",
+            "CustomerId": "CUST-3675",
+            "Status": "Placed",
+            "TotalCost": 500.55
+          }
+        }
+      ]
+    }
+  }
+}
+```
 ## Salesforce Configuration
 
 ### 7. Obtain a Salesforce Org and Load Sample Data

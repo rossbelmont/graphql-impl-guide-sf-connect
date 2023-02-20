@@ -86,7 +86,7 @@ Use `curl` or Postman to ping the endpoint with the API key and see that auth is
 
 ## Salesforce Configuration
 
-### Obtain a Salesforce Org and Load Sample Data
+### 7. Obtain a Salesforce Org and Load Sample Data
 Work with your account rep to get Salesforce Connect enabled in a sandbox of your choice. Alternatively, you can [sign up for a Developer Edition org](https://developer.salesforce.com/signup) or get a Salesforce org via our [Trailhead learning platform](https://trailhead.salesforce.com/).
 
 Once the org is created and you can log in, take advantage of the sample data here to see how customer data in Salesforce can be augmented with data from external systems:
@@ -98,7 +98,7 @@ The sample data here is meant to represent a realistic scenario in which custome
 
 After the AppSync is connected to Salesforce—read on to get to this step—you’ll see that the data in RDS references data imported in this step. The result is that Order data stored in AWS can be seen as a Related List on the Account page.
 
-### Configure the Named Credential
+### 8. Configure the Named Credential
 The AWS server resources created in the steps above need to be accessed by Salesforce acting as a client application calling out via HTTPS. This is managed by Salesforce’s Named Credentials capability, which combines the definition of a remote endpoint along with the authentication needed to call that API successfully.
 
 To be more specific, the **External Credential** captures the authentication details, and the **Named Credential** specifies the target endpoint itself. The Named Credential holds a reference to the External Credential so that the callout subsystem knows what authentication to use for the endpoint in question.
@@ -160,7 +160,7 @@ For technical reasons, credential parameters are stored in a standard object cal
 
 ![Granting access to User External Credentials](https://github.com/rossbelmont/graphql-impl-guide-sf-connect/blob/main/images/grant-UCE-Access.gif?raw=true)
 
-### Configure the External Data Source 
+### 9. Configure the External Data Source 
 The AppSync API acts as an **External Data Source** in Salesforce, which yields one or more **External Objects**. Those need to be configured, though the metadata exposed via AppSync allows you to skip many tedious steps. 
 
 First, create the External Data Source:
@@ -182,9 +182,12 @@ Next, we’ll use the exposed metadata to help create the External Objects:
 
 ![Sync the External Data Source](https://github.com/rossbelmont/graphql-impl-guide-sf-connect/blob/main/images/sync-xds.png?raw=true)
 
-### Surface the Data in the Salesforce UI
+### 10. Surface the Data in the Salesforce UI
 Salesforce has access to the external data at this point, though you’ll want to take a few more steps to surface it to your end users. For the purposes of this test, edit the **Customer ID** field on the new Order object and click Change Field Type to make it an Indirect Lookup to the Account field linked via the **Customer ID** field you added to that standard object.
 
 Once you add the Related List for Orders to the Page Layout for Account, you’ll be able to see the order data from AWS in the context of the customer. This provides a convenient view of a customer's recent orders for support agents and sellers working in Salesforce.
 
 ![Order data in Salesforce](https://github.com/rossbelmont/graphql-impl-guide-sf-connect/blob/main/images/orders-under-account.png?raw=true)
+
+### 11. Attach Your Own Database Table
+Follow the pattern in the Schema and Parameter Store in Systems Manager to surface another RDS table to GraphQL.

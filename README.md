@@ -73,22 +73,65 @@ To save time, the AWS resources used in this example can be created via [this Cl
 - Under *Database username* choose *Connect with a Secrets Manager ARN*
 - Enter the ARN that you copied from the previous step (*"Note the Database Information in Secrets Manager"*)
 - Under *Enter the name of the database*, enter *graphqlrds*
-- Run a simple query to confirm that everything is working properly.
+- Run a simple query to confirm that everything is working properly. Copy/paste the statment below to save time, then click Run and view the results in the lower portion of the screen.
+
+```
+SELECT * FROM graphqlsample.my_order WHERE order_id = 'ORD-100';
+``` 
 
 ### 5. Test the AppSync API with a GraphQL Query
 - From the AWS console, navigate to AWS AppSync.
 - Choose the GraphQL API that was created by CloudFormation.
 - Choose *Queries* from the left navigation pane.
-- Run a simple GraphQL query in the Queries console to see that the API is returning the values as expected.
+- Run a simple GraphQL query in the Queries console to see that the API is returning the values as expected. This example runs a query via GraphQL which is functionally the same as the SQL query in the prior step. Paste the following into the center pane and click the Execute Query button (with the arrow icon).
+    - When you get more familiar with these concepts, you can use the Explorer to drill in and build up a similar query.
 
+```
+query MyQuery {
+  graphqlsample_MyOrder(where: {OrderId: {eq: "ORD-100"}}) {
+    edges {
+      node {
+        OrderDate
+        SourceIpAddress
+        CustomerId
+        Status
+        TotalCost
+      }
+    }
+  }
+}
+```
+
+After you click the Execute Query button, it may take a minute or so to see the first set of results due to Lambda's cold start. When it returns, you should see the following in the right-hand pane:
+
+```
+{
+  "data": {
+    "graphqlsample_MyOrder": {
+      "edges": [
+        {
+          "node": {
+            "OrderDate": "2022-09-13T10:10:01Z",
+            "SourceIpAddress": "169.114.197.175",
+            "CustomerId": "CUST-3675",
+            "Status": "Placed",
+            "TotalCost": 500.55
+          }
+        }
+      ]
+    }
+  }
+}
+```
 ### 6. Test the API Key
-Use `curl` (sample below) or Postman to ping the endpoint with the API key and see that auth is functioning correctly.
+Use `curl` (sample below) or Postman to ping the endpoint with the API key and see that auth is functioning correctly. Here, we will run the same query as the prior step, but from outside the AWS console. Again, the purpose is to validate the connectivity and authentication, since Salesforce will make a similar HTTP call to AppSync.
 
 ```
 curl -XPOST -H "Content-Type:application/graphql" -H "x-api-key:YOUR-API-key" -d '{ "query": "query MyQuery {graphqlsample_MyOrder(where: {OrderId: {eq: \"ORD-100\"}}) {edges {node {OrderDate SourceIpAddress CustomerId Status TotalCost}}}}" }' https://YOUR-APPSYNC-ENDPOINT/graphql
 ```
 
 You should see the following data returned (formatted here for readability):
+
 ```
 {
   "data": {

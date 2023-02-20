@@ -257,4 +257,19 @@ Once you add the Related List for Orders to the Page Layout for Account, you’l
 ![Order data in Salesforce](https://github.com/rossbelmont/graphql-impl-guide-sf-connect/blob/main/images/orders-under-account.png?raw=true)
 
 ### 11. Attach Your Own Database Table
-Follow the pattern in the Schema and Parameter Store in Systems Manager to surface another RDS table to GraphQL.
+Once you’ve gotten the out-of-box demo working, you can think about how to surface your own RDS tables to AppSync and Salesforce. 
+
+If the tables are in the same RDS instance, you only need to do the following:
+
+- Update the Schema in AppSync by adding the `type` and `input` declarations for the additional table
+    - Follow the pattern you see in the `Graphqlsample_MyOrder` type to get the syntax correct.
+- Make sure to click **Save Schema** to capture your updates.
+- Attach the included resolver to the query and mutations for the new table.
+    - In the **Resolvers** section of the Schema tab in AWS AppSync console, select the query or mutation, and click **Attach**. In **Create new resolver**, select the Lambda function from the dropdown list. 
+    - Repeat the process to attach the resolver for all the queries and mutations defined in the GraphQL schema. For example, if Salesforce Connect can perform create, read, update and delete operations on records, you must attach the resolver four times.
+- Add additional entries in the Parameter Store in Systems Manager to specify the metadata.
+    - Follow the example in `/appsync/typemetadata/Graphqlsample_MyOrder` and create an additional parameter for each table, including the `fieldTypes`, `keyColumns`, etc.
+
+If you are using a different RDS instance, you’ll also need to add the RDS credentials to the Secrets Manager and set up the port forwarding so that the resolver can have a persistent connection to RDS. If you are unsure about this element of the infrastructure, contact AWS support.
+
+After the new GraphQL type is successfully added to the API endpoint (which you should validate with `curl` as in step 6), you’ll need to go back to your External Data Source definition in Salesforce and Sync the metadata so that Salesforce Connect can pull in the new object(s) and fields. From there, you can decide where exactly to surface this data in the Salesforce UI.

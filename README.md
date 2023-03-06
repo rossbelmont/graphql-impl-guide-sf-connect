@@ -51,11 +51,11 @@ To save time, the AWS resources used in this example can be created via [this Cl
     - Set *MaxCapacity* to desired maximum capacity of your RDS cluster.
 - Provide the following values under AppSync
     - For *AppSyncAuthenticationType* choose API_KEY if you want to configure an API KEY for authentication or AWS_IAM for AWS IAM role based authentication.
-    - For *GraphQLAdapterLocation* enter *https://github.com/rossbelmont/graphql-impl-guide-sf-connect/blob/main/graphql.resolvers.sql-1.0.0.jar*
+    - For *GraphQLAdapterLocation* enter *https://github.com/rossbelmont/graphql-impl-guide-sf-connect/raw/main/graphql.resolvers.sql-1.0.0.jar*
     - For *GraphQLAdapterName* enter *graphql.resolvers.sql-1.0.0.jar*
-    - For *GraphQLSchemaLocation* enter *https://github.com/rossbelmont/graphql-impl-guide-sf-connect/blob/main/postgres-schema.graphql*
+    - For *GraphQLSchemaLocation* enter *https://raw.githubusercontent.com/rossbelmont/graphql-impl-guide-sf-connect/main/postgres-schema.graphql*
     - For *GraphQLSchemaName* enter *postgres-schema.graphql*
-    - For *RDSSchemaLocation* enter *https://github.com/rossbelmont/graphql-impl-guide-sf-connect/blob/main/postgres-ddl.sql*
+    - For *RDSSchemaLocation* enter *https://raw.githubusercontent.com/rossbelmont/graphql-impl-guide-sf-connect/main/postgres-ddl.sql*
     - For *RDSSchemaName* enter *postgres-ddl.sql*
 - Choose Next, followed by Next.
 - Acknowledge by checking the checkbox next to *I acknowledge that AWS CloudFormation might create IAM resources.*
